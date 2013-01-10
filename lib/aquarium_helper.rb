@@ -14,6 +14,14 @@ module AquariumHelper
     end
   end
 
+  def around(object, method, &block)
+    Aspect.new :around, methods: [method], for_objects: [object] do |*args|
+      jp = args[0]
+      jp.proceed
+      block.call(args)
+    end
+  end
+
   def before_all(object, &block)
     all_fns = object.class.instance_methods - Object.methods
     all_fns.each do |fn|
