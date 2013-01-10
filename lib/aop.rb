@@ -2,6 +2,14 @@
 #https://github.com/mlen
 #
 module AOP
+  def before_all(object, &block)
+    fns = [object.class.instance_methods - Object.methods]
+    fns.each do |symbol|
+      puts symbol
+      #before(object, symbol, &block)
+    end
+  end
+
   def before(object, symbol, &block)
     original = object.method(symbol)
 
@@ -59,6 +67,7 @@ module AOPExample
 
 end
 
-#include AOP
+include AOP
+
 #include AOPExample
 #AOPExample::try_me

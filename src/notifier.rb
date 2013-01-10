@@ -2,12 +2,10 @@ require './src/usecase'
 require './src/services'
 require './lib/aop.rb'
 
-include AOP
-
 class Notifier
-  def test(usecase)
-    after usecase, :start do
-      puts "usecase ended"
+  def trace_calls(usecase)
+    before_all usecase do
+      puts "before_all"
     end
 
     before usecase, :start do
@@ -36,8 +34,8 @@ if __FILE__ == $0
   http_fetcher = HttpFetcher.new
   page_parser = PageParser.new
 
+  notifier.trace_calls(usecase)
   notifier.apply_glue(usecase, email_service, http_fetcher, page_parser)
-  notifier.test(usecase)
 
   usecase.start
 
