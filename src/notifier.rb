@@ -1,25 +1,24 @@
 require './src/usecase'
 require './src/services'
-require './lib/aop.rb'
+require './lib/aquarium_helper'
+
+include AquariumHelper
+
 
 class Notifier
   def trace_calls(usecase)
-    before_all usecase do
-      puts "before_all"
+    before usecase, :start do |jp|
+      puts "Starting..."
     end
-
-    before usecase, :start do
-      puts "starting usecase.."
+    before_all usecase do |jp|
+      puts "before: #{jp[0].method_name}"
+    end
+    after_all usecase do |jp|
+      puts "after: #{jp[0].method_name}"
     end
   end
 
-
-
   def apply_glue(usecase, email_service, http_fetcher, page_parser)
-
-
-
-
   end
 end
 
