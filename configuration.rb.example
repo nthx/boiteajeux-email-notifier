@@ -1,0 +1,13 @@
+class Configuration
+  attr_accessor :emails, :game_id, :url
+
+  def initialize
+    @game_id = 552218
+    @url = "http://www.boiteajeux.net/jeux/agr/partie.php?id=#{@game_id}"
+    @emails = {
+      :uncle => 'another@email.com',
+      :bob => 'some@email.com',
+    }
+  end
+end
+
