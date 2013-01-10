@@ -1,4 +1,4 @@
-require './configuration'
+require './src/configuration'
 
 
 class Usecase

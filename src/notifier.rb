@@ -1,5 +1,5 @@
-require './usecase'
-require './services'
+require './src/usecase'
+require './src/services'
 require './lib/aop.rb'
 
 include AOP

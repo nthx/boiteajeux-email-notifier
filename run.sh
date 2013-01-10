@@ -1,10 +1,10 @@
 #!/bin/bash
 
 
-if [ -e configuration.rb ];
+if [ -e src/configuration.rb ];
 then
   echo "Configuration found, running notifier..."
-  ruby notifier.rb
+  ruby src/notifier.rb
 else
-  echo "No configuration found! adjust & cp configuration.rb.example -> configuration.rb"
+  echo "No configuration found! adjust & cp src/configuration.rb.example -> src/configuration.rb"
 fi
