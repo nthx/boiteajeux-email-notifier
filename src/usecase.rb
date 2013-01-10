@@ -16,27 +16,36 @@ class Usecase
 
   def check_game_and_notify_current_guy
     data = retrieve_game_data(@url)
-    player = retrieve_current_player(data)
-    if was_not_yet_notified(player)
-      email = @emails[player]
-      tell_player_its_his_turn(email, @game_id, @url)
+    nick = retrieve_current_player(data)
+    puts "Got nick: #{nick}"
+    if was_not_yet_notified(nick)
+      email = @emails[nick.to_sym]
+      if email
+        puts "SENDING TO: #{email}"
+        tell_player_its_his_turn(email, nick, @game_id, @url)
+      else
+        puts "NOT SENDING: #{nick}"
+        
+      end
     end
   end
 
   def retrieve_game_data(url)
     #aop here
+    "example It's Batman turn"
   end
 
 
   def retrieve_current_player(data)
     #aop here
+    "Batman"
   end
 
-  def was_not_yet_notified(player)
+  def was_not_yet_notified(nick)
     true
   end
 
-  def tell_player_its_his_turn(email, game_id, url)
+  def tell_player_its_his_turn(email, nick, game_id, url)
     #aop here
     puts "Its your turn #{email}. Is it? I should send an email though"
   end

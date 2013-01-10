@@ -19,6 +19,15 @@ class Notifier
   end
 
   def apply_glue(usecase, email_service, http_fetcher, page_parser)
+    around usecase, :retrieve_game_data do |jp, usecase, url|
+      http_fetcher.fetch(url)
+    end
+    around usecase, :retrieve_current_player do |jp, usecase, data|
+      page_parser.find_nickname_in_a_page(data)
+    end
+    after usecase, :tell_player_its_his_turn do |jp, usecase, email, nick, game_id, url|
+      email_service.send_email(email, nick, game_id, url)
+    end
   end
 end
 
