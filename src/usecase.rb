@@ -21,10 +21,10 @@ class Usecase
     if was_not_yet_notified(nick)
       email = @emails[nick.to_sym]
       if email
-        puts "SENDING TO: #{email}"
+        puts "Sending to: #{email}"
         tell_player_its_his_turn(email, nick, @game_id, @url)
       else
-        puts "NOT SENDING: #{nick}"
+        puts "Not sending for: #{nick}"
         
       end
     end
@@ -47,7 +47,6 @@ class Usecase
 
   def tell_player_its_his_turn(email, nick, game_id, url)
     #aop here
-    puts "Its your turn #{email}. Is it? I should send an email though"
   end
 
 

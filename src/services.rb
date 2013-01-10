@@ -14,7 +14,6 @@ Subject: Twoj ruch na BojteAjeux #{game_id}
 #{url}
 EOF
 
-     
     puts "Sending email: #{email_config[:from]} => #{email_to}.."
     smtp = Net::SMTP.new email_config[:smtp], 587
     smtp.enable_starttls
@@ -28,7 +27,6 @@ class HttpFetcher
   require 'open-uri'
   def fetch(url)
     open(url).read
-    #"<html>It's my turn</html>"
   end
 end
 
