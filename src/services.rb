@@ -36,7 +36,9 @@ class PageParser
     page = Nokogiri::HTML(data)   
     its_player_turn = page.css("td[class='clInfo']").text
     match = /It's (?<nick>.*)'s turn !/.match(its_player_turn)
-    match[:nick]
+    if match
+      match[:nick]
+    end
   end
 end
 

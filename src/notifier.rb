@@ -8,7 +8,7 @@ include AquariumHelper
 class Notifier
 
   def run
-    usecase = Usecase.new
+    usecase = NotifyingPlayerOnHisMoveUsecase.new
 
     email_service = EmailService.new
     http_fetcher = HttpFetcher.new
