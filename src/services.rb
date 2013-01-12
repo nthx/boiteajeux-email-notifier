@@ -79,10 +79,10 @@ class Persistence
   def load_usecase_data(usecase)
     data = begin
       YAML.load(File.open("database.yml"))
-      puts "Loaded database: #{data}"
     rescue Exception => e
       #puts "Could not parse YAML: #{e.message}"
     end
+    puts "Loaded database: #{data}"
     if !!data
       usecase.last_notified_move = data[:last_notified_move]
     end
