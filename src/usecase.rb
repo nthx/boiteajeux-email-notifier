@@ -21,6 +21,8 @@ end
 class NotifyingPlayerOnHisMoveUsecase
   def initialize
     @config = Configuration.new
+    @moves_history = {}
+    @last_notified_move = nil
   end
 
   def start
@@ -39,8 +41,12 @@ class NotifyingPlayerOnHisMoveUsecase
     puts "Found player: #{player}"
 
     if any_nick_was_found(player.nick) 
-      history = retrieve_moves_history(history_of_moves_data)
-      notify_player(player, boiteajeux)
+      @moves_history = retrieve_moves_history(history_of_moves_data)
+      if player_not_yet_notified_on_current_game_state
+        notify_player(player, boiteajeux)
+      else
+        puts "Player already notified on move #{current_move}"
+      end
     end
   end
 
@@ -54,6 +60,17 @@ class NotifyingPlayerOnHisMoveUsecase
 
   def find_email_in_configuration(nick, emails)
     email = emails[nick.to_sym]
+  end
+
+  def player_not_yet_notified_on_current_game_state
+    if not !!@last_notified_move
+      return true
+    end
+    current_move.to_s != @last_notified_move.to_s
+  end
+
+  def current_move
+    @moves_history.length
   end
 
   def retrieve_game_data(url)
