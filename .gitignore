@@ -20,3 +20,9 @@ doc/
 *.swp
 
 configuration.rb
+boiteajeux-email-notifier.iml
+database.yml
+log
+crontab-entry
+run-on-aspectized.sh
+.idea
