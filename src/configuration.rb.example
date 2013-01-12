@@ -3,7 +3,6 @@ class Configuration
 
   def initialize
     @game_id = 123456
-    @url = "http://www.boiteajeux.net/jeux/agr/partie.php?id=#{@game_id}"
     @emails = {
       :me => 'me@email.com',
       :you => 'you@email.com'

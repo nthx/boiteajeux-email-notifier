@@ -31,6 +31,7 @@ end
 class HttpFetcher
   require 'open-uri'
   def fetch(url)
+    puts "Fetching #{url}"
     open(url).read
   end
 end
@@ -44,6 +45,31 @@ class PageParser
     if match
       match[:nick]
     end
+  end
+
+  def find_history_in_a_page(data)
+    moves = {}
+    page = Nokogiri::HTML(data)   
+    history = page.css("td[class='clHisto']")
+    history.each do |node|
+      if node.children.length <= 1 #node with round number
+        nil
+      else
+        move_number = node.children[0].text
+        rest = node.children[1..node.children.length]
+        move_text = ''
+        rest.each do |child|
+          if child.name == 'img'
+            move_text << "<img>"
+          else
+            move_text << "#{child.text}"
+          end
+        end
+        moves[move_number.to_i] = move_text
+      end
+    end
+    puts "Moves: #{moves.length}"
+    moves
   end
 end
 
