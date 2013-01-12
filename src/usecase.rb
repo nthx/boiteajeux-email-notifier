@@ -17,6 +17,7 @@ class NotifyingPlayerOnHisMoveUsecase
   def check_game_and_notify_current_guy
     data = retrieve_game_data(@url)
     nick = retrieve_current_player(data)
+    puts "Found player: #{nick}"
     if any_nick_was_found(nick) and was_not_yet_notified(nick)
       email = @emails[nick.to_sym]
       if email

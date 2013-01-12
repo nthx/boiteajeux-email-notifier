@@ -9,6 +9,7 @@ class Configuration
       :you => 'you@email.com'
     }
     @email = {
+      :enabled => true,
       :smtp => 'smtp.email.com',
       :server => 'email.com',
       :user => 'agricola_pusher',

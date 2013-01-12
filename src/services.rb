@@ -15,11 +15,16 @@ Subject: Twoj ruch na BojteAjeux #{game_id}
 EOF
 
     puts "Sending email: #{email_config[:from]} => #{email_to}.."
-    smtp = Net::SMTP.new email_config[:smtp], 587
-    smtp.enable_starttls
-    smtp.start(email_config[:server], email_config[:user], email_config[:pass], :login)
-    smtp.send_message message, email_config[:from], email_to
-    smtp.finish
+
+    if !!email_config[:enabled]
+      smtp = Net::SMTP.new email_config[:smtp], 587
+      smtp.enable_starttls
+      smtp.start(email_config[:server], email_config[:user], email_config[:pass], :login)
+      smtp.send_message message, email_config[:from], email_to
+      smtp.finish
+    else
+      puts "Email not sent - service disabled"
+    end
   end
 end
 
