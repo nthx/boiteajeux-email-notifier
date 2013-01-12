@@ -73,3 +73,23 @@ class PageParser
   end
 end
 
+
+class Persistence
+  require 'yaml'
+  def load_usecase_data(usecase)
+    data = begin
+      YAML.load(File.open("database.yml"))
+      puts "Loaded database: #{data}"
+    rescue Exception => e
+      #puts "Could not parse YAML: #{e.message}"
+    end
+    if !!data
+      usecase.last_notified_move = data[:last_notified_move]
+    end
+  end
+
+  def store_usecase_data(usecase)
+    data = {:last_notified_move => usecase.current_move}
+    File.open("database.yml", "w") {|f| f.write(data.to_yaml) }
+  end
+end

@@ -19,6 +19,7 @@ end
 
 
 class NotifyingPlayerOnHisMoveUsecase
+  attr_accessor :last_notified_move
   def initialize
     @config = Configuration.new
     @moves_history = {}
