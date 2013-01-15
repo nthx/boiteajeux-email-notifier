@@ -1,18 +1,18 @@
 class EmailService
-  def send_email(email_to, nick, game_id, url)
+  def send_email(email_to, nick, game_id, url, moves_history)
     require 'net/smtp'
     require './src/configuration'
     config = Configuration.new
     email_config = config.email
 
+    body = EmailBodyGenerator.new(nick, game_id, url, moves_history).generate
+
     message = <<EOF
 From: Agricola Popychacz <#{email_config[:from]}>
 To: #{nick} <#{email_to}>
-Subject: Twoj ruch na BojteAjeux #{game_id}
-
-#{nick.capitalize} grasz, a wiesz, ze Twoj ruch? Powodzenia!
-#{url}
+#{body}
 EOF
+    puts message
 
     puts "Sending email: #{email_config[:from]} => #{email_to}.."
 
@@ -26,6 +26,31 @@ EOF
       puts "Email not sent - service disabled"
     end
   end
+end
+
+class EmailBodyGenerator
+  def initialize(nick, game_id, url, moves_history)
+    @nick = nick
+    @game_id = game_id
+    @url = url
+    @moves_history = moves_history
+  end
+
+  def generate
+    body = <<EOF
+Subject: Twoj ruch na BojteAjeux #{@game_id}
+
+#{@nick.capitalize} grasz, a wiesz, ze Twoj ruch? Powodzenia!
+#{@url}
+
+Ostatnie ruchy:
+#{moves}
+EOF
+  end
+
+  def moves
+  end
+
 end
 
 class HttpFetcher
@@ -71,25 +96,68 @@ class PageParser
 
   def find_moves(page, nicks)
     moves = {}
-    history = page.css("td[class='clHisto']")
-    history.each do |node|
-      if node.children.length <= 1 #node with round number
-        nil
-      else
-        move_number = node.children[0].text
-        rest = node.children[1..node.children.length]
-        move_text = ''
-        rest.each do |child|
-          if child.name == 'img'
-            move_text << "<img>"
-          else
-            move_text << "#{child.text}"
-          end
+    history_table = find_table_with_history(page)
+    rows = history_table.css("tr")
+    rows.to_enum.with_index do |tr, index|
+      if index == 0 #tr with thead "nicks"
+        next
+      end
+
+      tds_with_moves = tr.children
+      if row_contains_round_number(tr, nicks)
+        tds_with_moves = tr.children[1..tr.children.length]
+      end
+
+      tds_with_moves.to_enum.with_index do |td, td_index|
+        move_number, move_description = parse_td_with_move_description(td)
+        nick = nick_by_number(nicks, td_index)
+        if move_number
+          puts "#{move_number}: #{nick}: #{move_description}"
+          moves[move_number] = {
+            :number => move_number,
+            :nick => nick,
+            :description => move_description
+          }
         end
-        moves[move_number.to_i] = move_text
       end
     end
     moves
+  end
+
+  def row_contains_round_number(tr, nicks)
+    tr.children.length == nicks.length + 1
+  end
+
+  def nick_by_number(nicks, number)
+    if nicks and nicks.length > 0
+      nicks[number]
+    else
+      nil
+    end
+  end
+
+  def parse_td_with_move_description(td)
+    number = 0
+    text = ''
+    if td.children.length < 2
+      return nil, nil
+    end
+    td.children.to_enum.with_index do |child, index|
+      #puts "Parsing td child: #{child.text}"
+      if index == 0
+        number = child.text.to_i
+        #puts "NUMBER: #{number}"
+        next
+      end
+
+      if child.name == 'img'
+        text << "<img #{child.attributes['src']}>"
+      else
+        text << "#{child.text}"
+      end
+    end
+    #puts "TEXT: #{text}"
+    return number, text
   end
 
   def find_nicks(page)
@@ -108,6 +176,14 @@ class PageParser
       end
     end
     nicks
+  end
+
+  def find_table_with_history(page)
+    tables = page.css('table')
+    if tables.length != 2
+      raise "Expecting 2 tables inside html"
+    end
+    tables[1]
   end
 end
 

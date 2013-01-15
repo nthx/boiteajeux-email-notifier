@@ -38,14 +38,14 @@ class Notifier
       page_parser.find_game_over_in_a_page(data)
     end
 
-    after usecase, :tell_player_its_his_turn do |jp, usecase, email, nick, game_id, url|
-      email_service.send_email(email, nick, game_id, url)
+    after usecase, :tell_player_its_his_turn do |jp, usecase, email, nick, game_id, url, moves_history|
+      email_service.send_email(email, nick, game_id, url, moves_history)
     end
 
     before usecase, :start do |jp, usecase|
       persistence.load_usecase_data(usecase)
     end
-    after usecase, :notify_player do |jp, usecase, player, boiteajeux|
+    after usecase, :notify_player do |jp, usecase, player, boiteajeux, moves_history|
       persistence.store_usecase_data(usecase)
     end
   end
