@@ -34,14 +34,14 @@ class NotifyingPlayerOnHisMoveUsecase
 
   def check_game_and_notify_current_guy(player, boiteajeux)
     game_data = retrieve_game_data(boiteajeux.url)
-    history_of_moves_data = retrieve_history_data(boiteajeux.history_url)
 
     player.nick = retrieve_current_player(game_data)
     player.email = find_email_in_configuration(player.nick, @config.emails)
 
-    puts "Found player: #{player}"
+    puts "Found #{player}"
 
     if any_nick_was_found(player.nick) and player_wishes_to_be_notified(player)
+      history_of_moves_data = retrieve_history_data(boiteajeux.history_url)
       @moves_history = retrieve_moves_history(history_of_moves_data)
       if player_not_yet_notified_on_current_game_state
         notify_player(player, boiteajeux)
