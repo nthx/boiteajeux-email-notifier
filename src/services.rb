@@ -47,6 +47,16 @@ class PageParser
     end
   end
 
+  def find_game_over_in_a_page(data)
+    page = Nokogiri::HTML(data)
+    match = /GAME OVER/.match(page.text)
+    if match
+      true
+    else
+      false
+    end
+  end
+
   def find_history_in_a_page(data)
     moves = {}
     page = Nokogiri::HTML(data)   

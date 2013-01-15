@@ -34,6 +34,9 @@ class Notifier
     around usecase, :retrieve_moves_history do |jp, usecase, data|
       page_parser.find_history_in_a_page(data)
     end
+    around usecase, :retrieve_if_game_over do |jp, usecase, data|
+      page_parser.find_game_over_in_a_page(data)
+    end
 
     after usecase, :tell_player_its_his_turn do |jp, usecase, email, nick, game_id, url|
       email_service.send_email(email, nick, game_id, url)
