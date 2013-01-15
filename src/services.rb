@@ -28,6 +28,7 @@ EOF
   end
 end
 
+
 class EmailBodyGenerator
   def initialize(nick, game_id, url, moves_history)
     @nick = nick
@@ -44,6 +45,7 @@ Subject: Twoj ruch na BojteAjeux #{@game_id}
 #{@url}
 
 Ostatnie ruchy:
+
 #{moves}
 EOF
   end
@@ -55,10 +57,9 @@ EOF
       text << "#{move[:number]} #{move[:nick]}: #{move[:description]}\n"
     end
     text
-
   end
-
 end
+
 
 class HttpFetcher
   require 'open-uri'
@@ -67,6 +68,7 @@ class HttpFetcher
     open(url).read
   end
 end
+
 
 class PageParser
   require 'nokogiri'
@@ -158,7 +160,7 @@ class PageParser
       end
 
       if child.name == 'img'
-        text << "<img #{child.attributes['src']}>"
+        text << "<#{MoveBeautifier.convert(child.attributes['src'].text)}>"
       else
         text << "#{child.text}"
       end
@@ -195,6 +197,24 @@ class PageParser
 end
 
 
+class MoveBeautifier
+  def self.convert(value)
+    value.
+      gsub("img/pionBois16.png", "wood").
+      gsub("img/pionPN16.png", "food").
+      gsub("img/1stJ.gif", "1st").
+      gsub("img/pionRoseau16.png", "reed").
+      gsub("img/pionPierre16.png", "stone").
+      gsub("img/pionArgile16.png", "clay").
+      gsub("img/pionCereale16.png", "grain").
+      gsub("img/pionLegume16.png", "veg").
+      gsub("img/pionBoeuf16.png", "cow").
+      gsub("img/pionSanglier16.png", "pig").
+      gsub("img/pionMouton16.png", "sheep")
+  end
+end
+
+
 class Persistence
   require 'yaml'
   def load_usecase_data(usecase)
@@ -214,3 +234,4 @@ class Persistence
     File.open("database.yml", "w") {|f| f.write(data.to_yaml) }
   end
 end
+
