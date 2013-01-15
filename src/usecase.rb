@@ -41,7 +41,7 @@ class NotifyingPlayerOnHisMoveUsecase
 
     puts "Found player: #{player}"
 
-    if any_nick_was_found(player.nick) 
+    if any_nick_was_found(player.nick) and player_wishes_to_be_notified(player)
       @moves_history = retrieve_moves_history(history_of_moves_data)
       if player_not_yet_notified_on_current_game_state
         notify_player(player, boiteajeux)
@@ -95,6 +95,14 @@ class NotifyingPlayerOnHisMoveUsecase
   def retrieve_moves_history(history_data)
     #aop here
     {1 => "Taken grain", 2 => "Ploughs field"}
+  end
+
+  def player_wishes_to_be_notified(player)
+    if !!player.email
+      true
+    else
+      puts "Player wishes no notification #{player}"
+    end
   end
 
   def any_nick_was_found(nick)
