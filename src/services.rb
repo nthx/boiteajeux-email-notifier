@@ -58,8 +58,19 @@ class PageParser
   end
 
   def find_history_in_a_page(data)
+    page = Nokogiri::HTML(data)
+
+    nicks = find_nicks(page)
+    puts "Nicks found: #{nicks}"
+
+    moves = find_moves(page, nicks)
+    puts "Moves: #{moves.length}"
+
+    moves
+  end
+
+  def find_moves(page, nicks)
     moves = {}
-    page = Nokogiri::HTML(data)   
     history = page.css("td[class='clHisto']")
     history.each do |node|
       if node.children.length <= 1 #node with round number
@@ -78,8 +89,25 @@ class PageParser
         moves[move_number.to_i] = move_text
       end
     end
-    puts "Moves: #{moves.length}"
     moves
+  end
+
+  def find_nicks(page)
+    header = page.css("th[class='clHisto clHistoFonce']")
+    label = "Round #"
+    nick_nodes = header.children
+    if nick_nodes.length <= 1 or nick_nodes[0].text != label
+      raise "Something bad. Only 1 player? No label? #{nick_nodes[0].text}"
+    end
+
+    nicks = []
+    nick_nodes.each do |node|
+      index = 0
+      if node.name == 'text' and node.text != label
+        nicks << node.text.strip
+      end
+    end
+    nicks
   end
 end
 

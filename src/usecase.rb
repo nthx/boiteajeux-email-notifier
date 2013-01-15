@@ -46,8 +46,8 @@ class NotifyingPlayerOnHisMoveUsecase
     puts "Found #{player}"
 
     if any_nick_was_found(player.nick) and player_wishes_to_be_notified(player)
-      history_of_moves_data = retrieve_history_data(boiteajeux.history_url)
-      @moves_history = get_moves_history(history_of_moves_data)
+      history_data = retrieve_history_data(boiteajeux.history_url)
+      @moves_history = get_moves_history(history_data)
       if player_not_yet_notified_on_current_game_state
         notify_player(player, boiteajeux)
       else
