@@ -49,6 +49,13 @@ EOF
   end
 
   def moves
+    text = ''
+    @moves_history.sort.reverse[0..15].sort.each do |number, move|
+      puts move
+      text << "#{move[:number]} #{move[:nick]}: #{move[:description]}\n"
+    end
+    text
+
   end
 
 end
