@@ -60,7 +60,9 @@ class NotifyingPlayerOnHisMoveUsecase
   end
 
   def find_email_in_configuration(nick, emails)
-    email = emails[nick.to_sym]
+    if !!nick
+      email = emails[nick.to_sym]
+    end
   end
 
   def player_not_yet_notified_on_current_game_state
