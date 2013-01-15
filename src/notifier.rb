@@ -28,13 +28,13 @@ class Notifier
       http_fetcher.fetch(url)
     end
 
-    around usecase, :retrieve_current_player do |jp, usecase, data|
+    around usecase, :get_game_current_nick do |jp, usecase, data|
       page_parser.find_nickname_in_a_page(data)
     end
-    around usecase, :retrieve_moves_history do |jp, usecase, data|
+    around usecase, :get_moves_history do |jp, usecase, data|
       page_parser.find_history_in_a_page(data)
     end
-    around usecase, :retrieve_if_game_over do |jp, usecase, data|
+    around usecase, :check_if_its_game_over do |jp, usecase, data|
       page_parser.find_game_over_in_a_page(data)
     end
 

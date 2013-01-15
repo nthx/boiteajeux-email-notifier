@@ -35,19 +35,19 @@ class NotifyingPlayerOnHisMoveUsecase
   def check_game_and_notify_current_guy(player, boiteajeux)
     game_data = retrieve_game_data(boiteajeux.url)
 
-    is_game_over = retrieve_if_game_over(game_data)
+    is_game_over = check_if_its_game_over(game_data)
     if is_game_over
       puts "Game over"
       return
     end
-    player.nick = retrieve_current_player(game_data)
+    player.nick = get_game_current_nick(game_data)
     player.email = find_email_in_configuration(player.nick, @config.emails)
 
     puts "Found #{player}"
 
     if any_nick_was_found(player.nick) and player_wishes_to_be_notified(player)
       history_of_moves_data = retrieve_history_data(boiteajeux.history_url)
-      @moves_history = retrieve_moves_history(history_of_moves_data)
+      @moves_history = get_moves_history(history_of_moves_data)
       if player_not_yet_notified_on_current_game_state
         notify_player(player, boiteajeux)
       else
@@ -92,17 +92,17 @@ class NotifyingPlayerOnHisMoveUsecase
   end
 
 
-  def retrieve_current_player(game_data)
+  def get_game_current_nick(game_data)
     #aop here
     "Batman"
   end
 
-  def retrieve_moves_history(history_data)
+  def get_moves_history(history_data)
     #aop here
     {1 => "Taken grain", 2 => "Ploughs field"}
   end
 
-  def retrieve_if_game_over(game_data)
+  def check_if_its_game_over(game_data)
     #aop here
     false
   end
