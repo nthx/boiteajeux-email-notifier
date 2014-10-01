@@ -49,16 +49,16 @@ class NotifyingPlayerOnHisMoveUsecase
       history_data = retrieve_history_data(boiteajeux.history_url)
       @moves_history = get_moves_history(history_data)
       if player_not_yet_notified_on_current_game_state
-        notify_player(player, boiteajeux, @moves_history)
+        notify_player(player, boiteajeux, @moves_history, @last_notified_move)
       else
         puts "Player already notified on move #{current_move}"
       end
     end
   end
 
-  def notify_player(player, boiteajeux, moves_history)
+  def notify_player(player, boiteajeux, moves_history, last_notified_move)
     if !!player.email
-      tell_player_its_his_turn(player.email, player.nick, boiteajeux.game_id, boiteajeux.url, moves_history)
+      tell_player_its_his_turn(player.email, player.nick, boiteajeux.game_id, boiteajeux.url, moves_history, last_notified_move)
     else
       puts "Unknown: #{player}"
     end
@@ -127,7 +127,7 @@ class NotifyingPlayerOnHisMoveUsecase
     end
   end
 
-  def tell_player_its_his_turn(email, nick, game_id, url, moves_history)
+  def tell_player_its_his_turn(email, nick, game_id, url, moves_history, last_notified_move)
     #aop here
   end
 

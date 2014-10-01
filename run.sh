@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "--- `date`" | tee -a log
+echo "--- `date -u`" | tee -a log
 
 if [ -e src/configuration.rb ];
 then

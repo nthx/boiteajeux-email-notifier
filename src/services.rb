@@ -1,11 +1,11 @@
 class EmailService
-  def send_email(email_to, nick, game_id, url, moves_history)
+  def send_email(email_to, nick, game_id, url, moves_history, last_notified_move)
     require 'net/smtp'
     require './src/configuration'
     config = Configuration.new
     email_config = config.email
 
-    body = EmailBodyGenerator.new(nick, game_id, url, moves_history).generate
+    body = EmailBodyGenerator.new(nick, game_id, url, moves_history, last_notified_move).generate
 
     message = <<EOF
 From: Agricola Popychacz <#{email_config[:from]}>
@@ -30,16 +30,17 @@ end
 
 
 class EmailBodyGenerator
-  def initialize(nick, game_id, url, moves_history)
+  def initialize(nick, game_id, url, moves_history, last_notified_move)
     @nick = nick
     @game_id = game_id
     @url = url
     @moves_history = moves_history
+    @last_notified_move = last_notified_move
   end
 
   def generate
     body = <<EOF
-Subject: Twoj ruch na BojteAjeux #{@game_id}
+Subject: Twoj ruch na BojteAjeux #{@game_id}, move: #{@last_notified_move}
 
 #{@nick.capitalize} grasz, a wiesz, ze Twoj ruch? Powodzenia!
 #{@url}

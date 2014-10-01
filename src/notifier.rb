@@ -38,8 +38,8 @@ class Notifier
       page_parser.find_game_over_in_a_page(data)
     end
 
-    after usecase, :tell_player_its_his_turn do |jp, usecase, email, nick, game_id, url, moves_history|
-      email_service.send_email(email, nick, game_id, url, moves_history)
+    after usecase, :tell_player_its_his_turn do |jp, usecase, email, nick, game_id, url, moves_history, last_notified_move|
+      email_service.send_email(email, nick, game_id, url, moves_history, last_notified_move)
     end
 
     before usecase, :start do |jp, usecase|
