@@ -44,15 +44,16 @@ Subject: Twoj ruch na BojteAjeux #{@game_id}
 #{@nick.capitalize} grasz, a wiesz, ze Twoj ruch? Powodzenia!
 #{@url}
 
-Ostatnie ruchy:
-
 #{moves}
+...
+
+#{@url}
 EOF
   end
 
   def moves
     text = ''
-    @moves_history.sort.reverse[0..15].sort.each do |number, move|
+    @moves_history.sort.reverse[0..15].each do |number, move|
       puts move
       text << "#{move[:number]} #{move[:nick]}: #{move[:description]}\n"
     end
